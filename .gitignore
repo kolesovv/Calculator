@@ -1,0 +1,14 @@
+# Built files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# IDE files
+.idea/
+*.iml
+.gradle/
+build/
+
+# Local configuration files
+local.properties

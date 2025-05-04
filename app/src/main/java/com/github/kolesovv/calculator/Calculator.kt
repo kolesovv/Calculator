@@ -1,6 +1,7 @@
 package com.github.kolesovv.calculator
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,8 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Calculator(modifier: Modifier) {
+fun Calculator(modifier: Modifier, viewModel: CalculatorViewModel = CalculatorViewModel()) {
 
+    val state = viewModel.state.collectAsState()
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -45,7 +48,7 @@ fun Calculator(modifier: Modifier) {
             ) {
                 Text(
                     textAlign = TextAlign.Center,
-                    text = "45x8",
+                    text = state.value.expression,
                     fontSize = 36.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -56,7 +59,7 @@ fun Calculator(modifier: Modifier) {
             ) {
                 Text(
                     textAlign = TextAlign.Center,
-                    text = "360",
+                    text = state.value.result,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -67,10 +70,30 @@ fun Calculator(modifier: Modifier) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            AssistOptionsButton(text = "√")
-            AssistOptionsButton(text = "π")
-            AssistOptionsButton(text = "^")
-            AssistOptionsButton(text = "!")
+            AssistOptionsButton(
+                modifier = Modifier
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.SQRT))
+                    }, text = Symbol.SQRT.value
+            )
+            AssistOptionsButton(
+                modifier = Modifier
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.PI))
+                    }, text = Symbol.PI.value
+            )
+            AssistOptionsButton(
+                modifier = Modifier
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.POWER))
+                    }, text = Symbol.POWER.value
+            )
+            AssistOptionsButton(
+                modifier = Modifier
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.FACTORIAL))
+                    }, text = Symbol.FACTORIAL.value
+            )
         }
         Row(
             modifier = Modifier
@@ -81,26 +104,38 @@ fun Calculator(modifier: Modifier) {
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Clear)
+                    }
                     .background(MaterialTheme.colorScheme.secondary),
-                text = "AC"
+                text = Symbol.CLEAR.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.PARENTHESIS))
+                    }
                     .background(MaterialTheme.colorScheme.tertiary),
-                text = "( )"
+                text = Symbol.PARENTHESIS.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.PERCENT))
+                    }
                     .background(MaterialTheme.colorScheme.tertiary),
-                text = "%"
+                text = Symbol.PERCENT.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIVIDE))
+                    }
                     .background(MaterialTheme.colorScheme.tertiary),
-                text = "÷"
+                text = Symbol.DIVIDE.value
             )
         }
         Row(
@@ -112,26 +147,38 @@ fun Calculator(modifier: Modifier) {
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIGIT_7))
+                    }
                     .background(MaterialTheme.colorScheme.primary),
-                text = "7"
+                text = Symbol.DIGIT_7.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIGIT_8))
+                    }
                     .background(MaterialTheme.colorScheme.primary),
-                text = "8"
+                text = Symbol.DIGIT_8.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIGIT_9))
+                    }
                     .background(MaterialTheme.colorScheme.primary),
-                text = "9"
+                text = Symbol.DIGIT_9.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.MULTIPLY))
+                    }
                     .background(MaterialTheme.colorScheme.tertiary),
-                text = "X"
+                text = Symbol.MULTIPLY.value
             )
         }
         Row(
@@ -143,26 +190,38 @@ fun Calculator(modifier: Modifier) {
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIGIT_4))
+                    }
                     .background(MaterialTheme.colorScheme.primary),
-                text = "4"
+                text = Symbol.DIGIT_4.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIGIT_5))
+                    }
                     .background(MaterialTheme.colorScheme.primary),
-                text = "5"
+                text = Symbol.DIGIT_5.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIGIT_6))
+                    }
                     .background(MaterialTheme.colorScheme.primary),
-                text = "6"
+                text = Symbol.DIGIT_6.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.SUBTRACT))
+                    }
                     .background(MaterialTheme.colorScheme.tertiary),
-                text = "-"
+                text = Symbol.SUBTRACT.value
             )
         }
         Row(
@@ -174,26 +233,38 @@ fun Calculator(modifier: Modifier) {
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIGIT_1))
+                    }
                     .background(MaterialTheme.colorScheme.primary),
-                text = "1"
+                text = Symbol.DIGIT_1.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIGIT_2))
+                    }
                     .background(MaterialTheme.colorScheme.primary),
-                text = "2"
+                text = Symbol.DIGIT_2.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIGIT_3))
+                    }
                     .background(MaterialTheme.colorScheme.primary),
-                text = "3"
+                text = Symbol.DIGIT_3.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.ADD))
+                    }
                     .background(MaterialTheme.colorScheme.tertiary),
-                text = "+"
+                text = Symbol.ADD.value
             )
         }
         Row(
@@ -205,22 +276,31 @@ fun Calculator(modifier: Modifier) {
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DIGIT_0))
+                    }
                     .background(MaterialTheme.colorScheme.primary)
                     .aspectRatio(2 / 1f)
                     .weight(2.0f),
-                text = "0"
+                text = Symbol.DIGIT_0.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Input(Symbol.DOT))
+                    }
                     .background(MaterialTheme.colorScheme.primary),
-                text = ","
+                text = Symbol.DOT.value
             )
             MainOptionsButton(
                 modifier = Modifier
                     .clip(CircleShape)
+                    .clickable {
+                        viewModel.processUserInput(CalculatorCommand.Evaluate)
+                    }
                     .background(MaterialTheme.colorScheme.tertiary),
-                text = "="
+                text = Symbol.EVALUATE.value
             )
         }
     }

@@ -14,7 +14,7 @@ enum class Symbol(val value: String) {
     DIGIT_9("9"),
     ADD("+"),
     SUBTRACT("-"),
-    MULTIPLY("X"),
+    MULTIPLY("x"),
     DIVIDE("÷"),
     PERCENT("%"),
     POWER("^"),
@@ -24,5 +24,6 @@ enum class Symbol(val value: String) {
     DOT(","),
     PARENTHESIS("()"),
     CLEAR("AC"),
-    EVALUATE("=")
+    EVALUATE("="),
+    EMPTY("")
 }

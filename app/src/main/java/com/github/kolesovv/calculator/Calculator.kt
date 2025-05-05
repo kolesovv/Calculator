@@ -24,9 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun Calculator(modifier: Modifier, viewModel: CalculatorViewModel = CalculatorViewModel()) {
+fun Calculator(modifier: Modifier, viewModel: CalculatorViewModel = viewModel()) {
 
     val state = viewModel.state.collectAsState()
     Column(
@@ -43,27 +44,59 @@ fun Calculator(modifier: Modifier, viewModel: CalculatorViewModel = CalculatorVi
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.End
         ) {
-            Box(
-                contentAlignment = Alignment.TopEnd
-            ) {
-                Text(
-                    textAlign = TextAlign.Center,
-                    text = state.value.expression,
-                    fontSize = 36.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
-            Box(
-                contentAlignment = Alignment.BottomEnd
-            ) {
-                Text(
-                    textAlign = TextAlign.Center,
-                    text = state.value.result,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer
-                )
+            when (val currentState = state.value) {
+                is CalculatorState.Error -> {
+                    Text(
+                        text = currentState.expression,
+                        lineHeight = 36.sp,
+                        fontSize = 36.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                    Text(
+                        text = Symbol.EMPTY.value,
+                        lineHeight = 17.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+
+                CalculatorState.Initial -> {}
+
+                is CalculatorState.Input -> {
+                    Text(
+                        text = currentState.expression,
+                        fontSize = 36.sp,
+                        lineHeight = 36.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        text = currentState.result,
+                        lineHeight = 17.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+
+                is CalculatorState.Success -> {
+                    Text(
+                        text = currentState.result,
+                        fontSize = 36.sp,
+                        lineHeight = 36.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        text = Symbol.EMPTY.value,
+                        lineHeight = 17.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
             }
         }
         Row(
@@ -178,7 +211,7 @@ fun Calculator(modifier: Modifier, viewModel: CalculatorViewModel = CalculatorVi
                         viewModel.processUserInput(CalculatorCommand.Input(Symbol.MULTIPLY))
                     }
                     .background(MaterialTheme.colorScheme.tertiary),
-                text = Symbol.MULTIPLY.value
+                text = Symbol.MULTIPLY.value.uppercase()
             )
         }
         Row(
